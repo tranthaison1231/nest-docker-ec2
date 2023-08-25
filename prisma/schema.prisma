@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  postId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  post      Post     @relation(fields: [postId], references: [id])
+
+  @@index([postId])
+}
+
+model OauthProvider {
+  id           String @id @default(cuid())
+  providerId   String
+  providerName String
+  userId       String
+  user         User?  @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model PermissionsOnRoles {
+  roleId       String
+  permissionId String
+  assignedAt   DateTime   @default(now())
+  assignedBy   String
+  role         Role       @relation(fields: [roleId], references: [id])
+  permission   Permission @relation(fields: [permissionId], references: [id])
+
+  @@id([roleId, permissionId])
+  @@index([roleId])
+  @@index([permissionId])
+}
+
+model Permission {
+  id        String               @id @default(cuid())
+  createdAt DateTime             @db.Date
+  name      UserPermission
+  updatedAt DateTime             @db.Date
+  roles     PermissionsOnRoles[]
+}
+
+model Post {
+  id        String    @id @default(cuid())
+  content   String
+  slug      String    @unique
+  title     String
+  authorId  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  author    User      @relation(fields: [authorId], references: [id])
+  comments  Comment[]
+
+  @@index([authorId])
+}
+
+model Role {
+  id          String               @id @default(cuid())
+  createdAt   DateTime             @db.Date
+  name        RoleName             @default(USER)
+  updatedAt   DateTime             @db.Date
+  users       RolesOnUsers[]
+  permissions PermissionsOnRoles[]
+}
+
+model RolesOnUsers {
+  roleId     String
+  userId     String
+  assignedAt DateTime @default(now())
+  assignedBy String
+  role       Role     @relation(fields: [roleId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@id([roleId, userId])
+  @@index([roleId])
+  @@index([userId])
+}
+
+model User {
+  id             String          @id @default(cuid())
+  avatarURL      String?
+  createdAt      DateTime        @default(now())
+  email          String          @unique
+  firstName      String
+  isVerified     Boolean
+  lastName       String?
+  password       String
+  phoneNumber    String?
+  salt           String
+  updatedAt      DateTime        @updatedAt
+  oauthProviders OauthProvider[]
+  posts          Post[]
+  roles          RolesOnUsers[]
+}
+
+enum UserPermission {
+  GET_USERS
+}
+
+enum RoleName {
+  ADMIN
+  USER
+}
