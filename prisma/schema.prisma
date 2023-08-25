@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Comment {
+  id        String   @id
+  content   String
+  postId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+
+  @@index([postId])
+}
+
+model OauthProvider {
+  id           String @id
+  providerId   String
+  providerName String
+  userId       String
+
+  @@index([userId])
+}
+
+model Permission {
+  id        String          @id
+  createdAt DateTime        @db.Date
+  name      Permission_name
+  updatedAt DateTime        @db.Date
+}
+
+model PermissionsOnRoles {
+  roleId       String
+  permissionId String
+  assignedAt   DateTime @default(now())
+  assignedBy   String
+
+  @@id([roleId, permissionId])
+  @@index([permissionId])
+  @@index([roleId])
+}
+
+model Post {
+  id        String   @id
+  content   String
+  slug      String   @unique
+  title     String
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+
+  @@index([authorId])
+}
+
+model Role {
+  id        String    @id
+  createdAt DateTime  @db.Date
+  name      Role_name @default(USER)
+  updatedAt DateTime  @db.Date
+}
+
+model RolesOnUsers {
+  roleId     String
+  userId     String
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([roleId, userId])
+  @@index([roleId])
+  @@index([userId])
+}
+
+model User {
+  id          String   @id @default(cuid())
+  avatarURL   String?
+  createdAt   DateTime @default(now())
+  email       String   @unique
+  firstName   String?
+  isVerified  Boolean
+  lastName    String?
+  password    String
+  phoneNumber String?
+  salt        String
+  updatedAt   DateTime @updatedAt
+}
+
+enum Role_name {
+  ADMIN
+  USER
+}
+
+enum Permission_name {
+  GET_USERS
+}
