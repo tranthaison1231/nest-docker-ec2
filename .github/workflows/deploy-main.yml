@@ -1,15 +1,19 @@
-name: Deploy
+name: CICD
+
 on:
   push:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
-  EC2-Deploy:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: [ubuntu-latest]
     steps:
-      - id: deploy
-        uses: bitovi/github-actions-deploy-docker-to-ec2@v0.5.0
-        with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_default_region: us-east-1
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} 
+      - name: Build docker image
+        run: docker build -t tranthaison1231/nest-enouvo-demo .
+      - name: Publish image to docker hub
+        run: docker push tranthaison1231/nest-enouvo-demo
+
