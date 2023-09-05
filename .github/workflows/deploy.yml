@@ -16,7 +16,6 @@ jobs:
         run: docker build -t tranthaison1231/nest-enouvo-demo .
       - name: Publish image to docker hub
         run: docker push tranthaison1231/nest-enouvo-demo
-  
   deploy:
     needs: build
     runs-on: [nest-enouvo]
@@ -26,4 +25,4 @@ jobs:
       - name: Delete old container
         run: docker rm -f nest-enouvo-demo
       - name: Run docker container
-        run: docker run -d -p 5000:5000 --name nest-enouvo-demo tranthaison1231/nest-enouvo-demo
+        run: docker run -d -p 3000:3000 --name nest-enouvo-demo tranthaison1231/nest-enouvo-demo
