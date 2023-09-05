@@ -19,7 +19,7 @@ jobs:
   
   deploy:
     needs: build
-    runs-on: [aws-ec2]
+    runs-on: [nest-enouvo]
     steps:
       - name: Pull image from docker hub
         run: docker pull tranthaison1231/nest-enouvo-demo:latest
