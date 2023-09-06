@@ -27,7 +27,9 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
+          all_envs: true 
           script: |
+            printenv
             docker stop nest-enouvo-demo || true
             docker rm nest-enouvo-demo || true
             docker pull tranthaison1231/nest-enouvo-demo:latest
