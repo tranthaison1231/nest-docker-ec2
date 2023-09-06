@@ -2,12 +2,13 @@ version: '3.5'
 
 services:
   app:
+    image: tranthaison1231/nest-enouvo-demo:latest
     build: 
       context: .
-    container_name: nest-docker
+    container_name: nest-enouvo-demo
     restart: always
-    environment:
-      - DATABASE_URL='mysql://wqbs4n19kuyu9dnbro83:pscale_pw_iH6CZ6bNjSkIj7yjWWrmR3wFO5E6cpGkGcgmJ1rqS2s@aws.connect.psdb.cloud/safelet?sslaccept=strict'
+    env_file:
+      - .env
     volumes:
       - .:/app
       - /app/node_modules
