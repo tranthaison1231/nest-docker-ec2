@@ -33,7 +33,7 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v3
-      - name: Copy file
+      - name: Copy file name
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
