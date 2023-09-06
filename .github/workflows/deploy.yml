@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Log env file content
         run: |
-          echo "DATABASE_URL is: ${{ secrets.DATABASE_URL }}"
+          echo "DATABASE_URL is: ${{ env.DATABASE_URL }}"
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} 
       - name: Build and push image
