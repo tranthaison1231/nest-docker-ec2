@@ -29,6 +29,10 @@ export class UsersService {
     return this.prismaService.user.findUnique({ where: { id } });
   }
 
+  getUserByEmail(email: string) {
+    return this.prismaService.user.findUnique({ where: { email } });
+  }
+
   createUser(createUserDto: CreateUserDto) {
     return this.prismaService.user.create({ data: createUserDto });
   }
