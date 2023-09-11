@@ -4,9 +4,16 @@ import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 import { ValidationPipe } from '@nestjs/common';
 import validationOptions from './shared/utils/validate';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(cookieParser());
+  app.enableCors({
+    credentials: true,
+    origin: true,
+  });
 
   app.useGlobalPipes(new ValidationPipe(validationOptions));
 

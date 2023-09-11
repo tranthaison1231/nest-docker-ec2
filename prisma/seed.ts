@@ -11,7 +11,6 @@ async function run() {
       phoneNumber: '123456789',
       salt: '123456789',
       password: '123456789',
-      isVerified: true,
       avatarURL: 'https://www.google.com',
     },
   });

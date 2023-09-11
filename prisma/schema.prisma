@@ -14,7 +14,6 @@ model User {
   createdAt   DateTime @default(now())
   email       String   @unique
   firstName   String?
-  isVerified  Boolean
   lastName    String?
   password    String
   phoneNumber String?

@@ -1,8 +1,8 @@
-import { User } from '@prisma/client';
 import { sign } from 'jsonwebtoken';
+import { JWTUser } from 'src/modules/auth/type';
 import { v4 as uuidv4 } from 'uuid';
 
-export function generateAccessToken(user: User) {
+export function generateAccessToken(user: JWTUser) {
   const accessToken = sign({ ...user }, process.env.ACCESS_TOKEN_SECRET_KEY, {
     expiresIn: '1m',
   });
