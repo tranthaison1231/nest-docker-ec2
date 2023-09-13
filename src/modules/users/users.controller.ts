@@ -20,6 +20,8 @@ export class UsersController {
 
   @Get()
   getUsers(@Query('page') page: string, @Query('limit') limit: string) {
+    console.log('aaa');
+
     return this.userService.getUsers(+page, +limit);
   }
 

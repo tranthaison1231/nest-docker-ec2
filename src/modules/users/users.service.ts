@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateUserDto, UpdateUserDto } from './dtos/users.dto';
 
@@ -20,8 +20,7 @@ export class UsersService {
         total,
       };
     } catch (error) {
-      console.error(error);
-      throw error;
+      throw new InternalServerErrorException(error);
     }
   }
 

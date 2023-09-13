@@ -67,8 +67,7 @@ export class AuthService {
         user: foundUser,
       };
     } catch (error) {
-      console.log(error);
-      throw error;
+      throw error.message;
     }
   }
 
@@ -91,8 +90,7 @@ export class AuthService {
 
       return newUser;
     } catch (error) {
-      console.log(error);
-      throw error;
+      throw error.message;
     }
   }
 

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Post,
+  Put,
   Req,
   Res,
   UnauthorizedException,
@@ -32,6 +33,7 @@ export class AuthenticationController {
         sameSite: 'none',
         httpOnly: true,
         secure: true,
+        path: '/refresh-token',
       });
 
       return {
@@ -40,7 +42,7 @@ export class AuthenticationController {
         user,
       };
     } catch (error) {
-      throw error;
+      throw new UnauthorizedException(error);
     }
   }
 
@@ -51,10 +53,11 @@ export class AuthenticationController {
 
       return newUser;
     } catch (error) {
-      throw error;
+      throw new UnauthorizedException(error);
     }
   }
-  @Post('/refresh-token')
+
+  @Put('/refresh-token')
   async refreshToken(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
@@ -67,7 +70,7 @@ export class AuthenticationController {
     const refreshToken = req.cookies['refreshToken'];
 
     if (!refreshToken || !id) {
-      throw new UnauthorizedException('Invalid Token');
+      throw new UnauthorizedException('Invalid Refresh Token');
     }
 
     const data = await this.authService.getRefreshToken(refreshToken, {
@@ -78,7 +81,7 @@ export class AuthenticationController {
     });
 
     if (!data) {
-      throw new UnauthorizedException('Token Expired');
+      throw new UnauthorizedException('Refresh Token Expired');
     }
 
     res.cookie('refreshToken', data.refreshToken, {
@@ -86,6 +89,7 @@ export class AuthenticationController {
       sameSite: 'none',
       httpOnly: true,
       secure: true,
+      path: '/refresh-token',
     });
 
     return data;
