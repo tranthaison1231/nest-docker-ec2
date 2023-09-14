@@ -1,36 +1,23 @@
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
-  Inject,
   Injectable,
   NestMiddleware,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { verify } from 'jsonwebtoken';
 
 @Injectable()
 export class AuthenticationSessionMiddleware implements NestMiddleware {
-  constructor(@Inject(CACHE_MANAGER) private cacheService: Cache) {}
+  constructor() {}
 
   async use(req: Request, _res: Response, next: NextFunction) {
+    console.log('req.session.userId', req.session as any);
+
     try {
-      const sessionId = req.cookies['refreshToken'];
-      const redisSessionId = this.cacheService;
-
-      const authHeader = req.header('Authorization');
-      const accessToken = authHeader && authHeader.split(' ')[1];
-
-      if (!accessToken) {
-        throw 'No token header provided!';
+      if (!(req.session as any).userId) {
+        throw 'Session Expired';
       }
 
-      verify(accessToken, process.env.ACCESS_TOKEN_SECRET_KEY, (err) => {
-        if (err) {
-          throw err.message;
-        }
-
-        next();
-      });
+      next();
     } catch (error) {
       throw new UnauthorizedException(error);
     }

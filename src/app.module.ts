@@ -4,6 +4,7 @@ import { PrismaModule, loggingMiddleware } from 'nestjs-prisma';
 import { CacheModule } from '@nestjs/cache-manager';
 import * as redisStore from 'cache-manager-redis-store';
 import { AuthModule } from './modules/auth/auth.module';
+import { AuthSessionModule } from './modules/auth-session/auth-session.module';
 @Module({
   imports: [
     CacheModule.register({
@@ -14,6 +15,7 @@ import { AuthModule } from './modules/auth/auth.module';
     }),
     AuthModule,
     UsersModule,
+    AuthSessionModule,
     PrismaModule.forRoot({
       isGlobal: true,
       prismaServiceOptions: {
