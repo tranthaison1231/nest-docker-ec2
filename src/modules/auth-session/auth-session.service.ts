@@ -19,15 +19,12 @@ export class AuthSessionService {
         throw new NotFoundException('User not found');
       }
 
-      // const { id } = foundUser;
-
       const isPasswordMatch = await verify(foundUser.password, password);
 
       if (!isPasswordMatch) {
         throw new BadRequestException('Incorrect Password');
       }
 
-      // await this.createSessionId(id);
       return foundUser;
     } catch (error) {
       throw error.message;
