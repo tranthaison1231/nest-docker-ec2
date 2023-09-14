@@ -33,7 +33,7 @@ export class AuthController {
         sameSite: 'none',
         httpOnly: true,
         secure: true,
-        path: '/',
+        path: '/refresh-token',
       });
 
       return {
@@ -92,7 +92,7 @@ export class AuthController {
         sameSite: 'none',
         httpOnly: true,
         secure: true,
-        path: '/',
+        path: '/refresh-token',
       });
 
       return data;
