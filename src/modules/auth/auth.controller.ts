@@ -33,7 +33,7 @@ export class AuthenticationController {
         sameSite: 'none',
         httpOnly: true,
         secure: true,
-        path: '/refresh-token',
+        path: '/',
       });
 
       return {
@@ -62,36 +62,42 @@ export class AuthenticationController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const authorizationHeader = req.headers['authorization'];
+    try {
+      const authorizationHeader = req.headers['authorization'];
 
-    const token = authorizationHeader && authorizationHeader.split(' ')[1];
-    const { id, firstName, lastName, email } = jwt.decode(token);
+      const token = authorizationHeader && authorizationHeader.split(' ')[1];
+      const refreshToken = req.cookies['refreshToken'];
 
-    const refreshToken = req.cookies['refreshToken'];
+      if (!refreshToken || !token) {
+        throw new UnauthorizedException('Invalid Token');
+      }
 
-    if (!refreshToken || !id) {
-      throw new UnauthorizedException('Invalid Refresh Token');
+      const jwtObject = await jwt.decode(token);
+
+      const { id, firstName, lastName, email } = jwtObject;
+
+      const data = await this.authService.getRefreshToken(refreshToken, {
+        id,
+        firstName,
+        lastName,
+        email,
+      });
+
+      if (!data) {
+        throw new UnauthorizedException('Refresh Token Expired');
+      }
+
+      res.cookie('refreshToken', data.refreshToken, {
+        maxAge: REFRESH_TOKEN_EXPIRE_IN * 60 * 1000,
+        sameSite: 'none',
+        httpOnly: true,
+        secure: true,
+        path: '/',
+      });
+
+      return data;
+    } catch (error) {
+      throw error;
     }
-
-    const data = await this.authService.getRefreshToken(refreshToken, {
-      id,
-      firstName,
-      lastName,
-      email,
-    });
-
-    if (!data) {
-      throw new UnauthorizedException('Refresh Token Expired');
-    }
-
-    res.cookie('refreshToken', data.refreshToken, {
-      maxAge: REFRESH_TOKEN_EXPIRE_IN * 60 * 1000,
-      sameSite: 'none',
-      httpOnly: true,
-      secure: true,
-      path: '/refresh-token',
-    });
-
-    return data;
   }
 }

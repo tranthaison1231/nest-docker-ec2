@@ -20,8 +20,6 @@ export class UsersController {
 
   @Get()
   getUsers(@Query('page') page: string, @Query('limit') limit: string) {
-    console.log('aaa');
-
     return this.userService.getUsers(+page, +limit);
   }
 
@@ -36,8 +34,6 @@ export class UsersController {
 
   @Post()
   createUser(@Body() createUserDto: CreateUserDto) {
-    console.log(createUserDto);
-
     return this.userService.createUser(createUserDto);
   }
 

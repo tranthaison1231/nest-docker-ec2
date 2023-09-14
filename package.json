@@ -33,6 +33,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "jsonwebtoken": "^9.0.2",
     "nestjs-prisma": "^0.22.0",
     "prisma": "^5.2.0",

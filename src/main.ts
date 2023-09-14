@@ -5,15 +5,25 @@ import { ValidationPipe } from '@nestjs/common';
 import validationOptions from './shared/utils/validate';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    cors: {
+      credentials: true,
+      origin: true,
+    },
+
+    bodyParser: true,
+  });
+
+  app.useBodyParser('json', {});
 
   app.use(cookieParser());
-  app.enableCors({
-    credentials: true,
-    origin: true,
-  });
+  // app.enableCors({
+  //   credentials: true,
+  //   origin: '*',
+  // });
 
   app.useGlobalPipes(new ValidationPipe(validationOptions));
 
