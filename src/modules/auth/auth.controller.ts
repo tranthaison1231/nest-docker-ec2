@@ -16,7 +16,7 @@ import * as jwt from 'jsonwebtoken';
 
 @ApiTags('Authen')
 @Controller()
-export class AuthenticationController {
+export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/sign-in')

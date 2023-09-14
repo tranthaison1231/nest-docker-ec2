@@ -15,3 +15,9 @@ export function generateRefreshToken() {
 
   return token;
 }
+
+export function generateSessionId() {
+  const token = uuidv4();
+
+  return token;
+}
