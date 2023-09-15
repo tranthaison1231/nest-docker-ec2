@@ -29,7 +29,7 @@ export class AuthController {
         await this.authService.signIn(props);
 
       response.cookie('refreshToken', refreshToken, {
-        maxAge: REFRESH_TOKEN_EXPIRE_IN * 60 * 1000,
+        maxAge: REFRESH_TOKEN_EXPIRE_IN * 60 * 60 * 1000,
         sameSite: 'none',
         httpOnly: true,
         secure: true,
@@ -68,6 +68,8 @@ export class AuthController {
       const token = authorizationHeader && authorizationHeader.split(' ')[1];
       const refreshToken = req.cookies['refreshToken'];
 
+      console.log('controller', refreshToken);
+
       if (!refreshToken || !token) {
         throw new UnauthorizedException('Invalid Token');
       }
@@ -88,7 +90,7 @@ export class AuthController {
       }
 
       res.cookie('refreshToken', data.refreshToken, {
-        maxAge: REFRESH_TOKEN_EXPIRE_IN * 60 * 1000,
+        maxAge: REFRESH_TOKEN_EXPIRE_IN * 60 * 60 * 1000,
         sameSite: 'none',
         httpOnly: true,
         secure: true,
